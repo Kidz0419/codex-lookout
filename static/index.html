@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="查看本机 Codex 任务的运行阶段、最近活动和异常证据。">
+  <title>Codex Lookout · 任务观测台</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#task-list">跳转到任务列表</a>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <svg class="brand-mark" viewBox="0 0 28 28" width="28" height="28" aria-hidden="true"><path d="M3 15h5l3-8 5 15 3-10 2 3h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        <span>Codex <strong>Lookout</strong></span>
+        <span class="local-label">本机 · 只读</span>
+      </div>
+      <div class="topbar-actions">
+        <div class="mode-switch" role="group" aria-label="选择数据来源">
+          <button type="button" class="mode-button is-active" id="live-mode" aria-pressed="true">实时数据</button>
+          <button type="button" class="mode-button" id="demo-mode" aria-pressed="false">演示案例</button>
+        </div>
+        <button type="button" class="button refresh-button" id="refresh-button"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M16 7a6.5 6.5 0 1 0 .5 5M16 3v4h-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="refresh-label">刷新</span></button>
+      </div>
+    </header>
+
+    <main>
+      <div class="page-heading">
+        <div><h1>任务观测台</h1><p>看清任务在做什么，以及等待背后的证据。</p></div>
+        <div class="sync-status" id="sync-status"><span class="status-dot" aria-hidden="true"></span><div><strong id="sync-title">正在连接本机</strong><span id="sync-detail">每 3 秒自动刷新</span></div></div>
+      </div>
+      <div class="demo-banner" id="demo-banner" hidden><strong>正在查看演示案例</strong><span>这里的任务、时间和状态均为合成示例，不代表你的真实任务。</span><button type="button" id="exit-demo">返回实时数据</button></div>
+      <div class="data-alert" id="data-alert" role="status" hidden></div>
+
+      <section class="monitor" aria-label="任务监测">
+        <div class="list-panel" id="task-list" tabindex="-1">
+          <div class="list-toolbar">
+            <div class="filters" role="group" aria-label="筛选任务状态">
+              <button type="button" data-filter="all" class="filter-button is-active" aria-pressed="true">全部 <span id="count-all">—</span></button>
+              <button type="button" data-filter="running" class="filter-button" aria-pressed="false">进行中 <span id="count-running">—</span></button>
+              <button type="button" data-filter="attention" class="filter-button" aria-pressed="false">需关注 <span id="count-attention">—</span></button>
+              <button type="button" data-filter="ended" class="filter-button" aria-pressed="false">已结束 <span id="count-ended">—</span></button>
+            </div>
+            <div class="search-field"><svg viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m13 13 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><input id="search-input" type="search" placeholder="搜索任务或项目" aria-label="搜索任务名称、项目路径或任务 ID" autocomplete="off" spellcheck="false"></div>
+          </div>
+          <div class="table-scroll" id="table-scroll">
+            <table class="task-table">
+              <caption class="sr-only">本机 Codex 任务，选择任务可查看诊断证据</caption>
+              <thead><tr><th scope="col">任务 / 项目</th><th scope="col">当前状态</th><th scope="col">本轮耗时</th><th scope="col">距新事件</th></tr></thead>
+              <tbody id="task-rows"></tbody>
+            </table>
+            <div class="list-empty" id="list-empty"><div class="empty-mark" aria-hidden="true"></div><h2 id="empty-title">正在读取本机任务</h2><p id="empty-description">首次读取可能需要几秒钟。</p><button type="button" class="button" id="clear-search" hidden>清除筛选</button></div>
+          </div>
+          <div class="list-footer"><span id="visible-count">准备任务列表…</span><span id="task-scope">最近 80 个未归档本机任务</span></div>
+        </div>
+
+        <aside class="inspector" aria-label="选中任务的诊断与证据">
+          <div class="inspector-topline"><h2>任务详情</h2><span id="detail-source">本机记录</span></div>
+          <div class="inspector-empty" id="inspector-empty"><svg viewBox="0 0 48 48" width="48" height="48" aria-hidden="true"><rect x="9" y="7" width="30" height="34" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M15 17h18M15 24h11M15 31h14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><p>选择一项任务<br><span>查看运行阶段与最近的活动证据</span></p></div>
+          <div id="detail-content" hidden>
+            <div class="detail-heading"><h3 id="detail-title"></h3><button type="button" class="text-button expand-title" id="expand-title" aria-expanded="false" aria-controls="detail-title" hidden>展开完整标题</button><p id="detail-project"></p><div class="task-actions"><button type="button" class="text-button" id="copy-id">复制任务 ID</button><a class="text-button" id="open-task" hidden>在 Codex 中打开 <span aria-hidden="true">↗</span></a></div></div>
+            <section class="diagnosis" id="diagnosis"><div class="diagnosis-heading"><h4 id="diagnosis-label"></h4><span class="confidence" id="diagnosis-confidence"></span></div><p id="diagnosis-summary"></p><div class="next-action"><span>建议</span><p id="diagnosis-action"></p></div></section>
+            <section class="detail-section" aria-labelledby="activity-heading"><h4 id="activity-heading">这一轮的活动</h4><dl class="facts"><div><dt>当前阶段</dt><dd id="fact-phase"></dd></div><div id="fact-tool-row" hidden><dt>当前工具</dt><dd id="fact-tool"></dd></div><div id="fact-tool-age-row" hidden><dt>工具已执行</dt><dd class="numeric" id="fact-tool-age"></dd></div><div><dt>本轮耗时</dt><dd class="numeric" id="fact-elapsed"></dd></div><div><dt>距新事件</dt><dd class="numeric" id="fact-silence"></dd></div><div><dt>开始时间</dt><dd class="numeric" id="fact-start"></dd></div><div><dt>模型</dt><dd id="fact-model"></dd></div></dl></section>
+            <section class="detail-section token-section" aria-labelledby="token-heading"><div class="section-title"><h4 id="token-heading">本轮 Token 用量</h4><span>落盘采样</span></div><dl class="token-facts"><div><dt>输出</dt><dd id="token-output">—</dd></div><div><dt>其中推理</dt><dd id="token-reasoning">—</dd></div><div><dt>总用量</dt><dd id="token-total">—</dd></div></dl><p class="section-note" id="token-note"></p><p class="sample-time" id="token-sample"></p></section>
+            <section class="detail-section" id="network-section" aria-labelledby="network-heading" hidden><div class="section-title"><h4 id="network-heading">本轮连接记录</h4><span id="network-count"></span></div><ol class="timeline" id="network-list"></ol><p class="section-note network-note">这些记录说明曾发生连接问题，不代表当前仍未恢复。</p></section>
+            <section class="detail-section" aria-labelledby="timeline-heading"><div class="section-title"><h4 id="timeline-heading">最近事件</h4><span id="event-count"></span></div><ol class="timeline" id="event-list"></ol><p class="section-note" id="events-empty" hidden>尚未读到这一轮的事件记录。</p></section>
+            <div class="coverage-note"><span class="coverage-indicator" id="coverage-indicator" aria-hidden="true"></span><p id="coverage-note"></p></div>
+          </div>
+        </aside>
+      </section>
+
+      <footer class="page-footer">
+        <div class="source-summary"><span class="source-dot" aria-hidden="true"></span><span id="source-summary">等待数据源</span></div>
+        <details id="source-details"><summary>数据来源与判断边界</summary><div class="source-popover"><h2>读取了哪些证据</h2><ul id="source-list"></ul><h2>这些信息如何理解</h2><ul id="limitations-list"></ul></div></details>
+        <span class="read-only-note">仅观察，不中断或修改任务</span>
+      </footer>
+    </main>
+  </div>
+  <div id="announcement" class="sr-only" role="status" aria-live="polite"></div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+name: Checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  tests:
+    runs-on: macos-15
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          architecture: arm64
+      - name: Python and native model checks
+        run: ./scripts/test.sh
+      - name: Build self-contained app
+        run: ./native/build.sh --release
+      - name: Exercise shipped runtime with synthetic data
+        run: python3 scripts/smoke-release.py 'dist/Codex Lookout.app'

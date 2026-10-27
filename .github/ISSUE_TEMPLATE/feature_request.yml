@@ -1,0 +1,22 @@
+name: Feature request
+description: Suggest a focused improvement
+title: "[Idea] "
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What decision or task is difficult today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Explain what you would see or do in the app, and any alternatives you considered.
+    validations:
+      required: true
+  - type: textarea
+    id: boundaries
+    attributes:
+      label: Data or permission needs
+      description: If relevant, describe any new data, network access, or task-control permissions.

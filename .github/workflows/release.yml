@@ -1,0 +1,51 @@
+name: Build release candidate
+on:
+  workflow_dispatch:
+    inputs:
+      notarize:
+        description: Sign with Developer ID and submit to Apple (requires configured secrets)
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  release:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          architecture: arm64
+      - run: ./scripts/test.sh
+      - name: Configure temporary signing keychain
+        if: ${{ inputs.notarize }}
+        env:
+          PULSE_CERTIFICATE_BASE64: ${{ secrets.DEVELOPER_ID_CERTIFICATE_BASE64 }}
+          PULSE_CERTIFICATE_PASSWORD: ${{ secrets.DEVELOPER_ID_CERTIFICATE_PASSWORD }}
+          PULSE_SIGNING_IDENTITY: ${{ secrets.DEVELOPER_ID_APPLICATION }}
+          PULSE_APPLE_ID: ${{ secrets.APPLE_ID }}
+          PULSE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          PULSE_APPLE_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+        run: ./scripts/ci-signing.sh
+      - name: Build self-contained release
+        run: ./native/build.sh --release
+      - name: Verify app and embedded runtime
+        run: python3 scripts/smoke-release.py 'dist/Codex Lookout.app'
+      - name: Notarize and package
+        if: ${{ inputs.notarize }}
+        run: ./scripts/package-release.sh --notarize
+      - name: Package ad-hoc signed candidate
+        if: ${{ !inputs.notarize }}
+        run: ./scripts/package-release.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: codex-lookout-macos-arm64-${{ inputs.notarize && 'notarized' || 'adhoc' }}
+          path: dist/releases/*
+          if-no-files-found: error
+      - name: Remove temporary signing material
+        if: ${{ always() && inputs.notarize }}
+        run: |
+          security delete-keychain "$RUNNER_TEMP/codex-lookout-signing.keychain-db" || true
+          rm -f "$RUNNER_TEMP/codex-lookout-certificate.p12"

@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.DS_Store
+.runtime/
+.impeccable/review/
+dist/
+native/.build/
+
+# Local tooling, captures, and unpublished release artifacts
+.localtools/
+.impeccable/
+release/
+.env
+.env.*
+*.sqlite*
+*.jsonl

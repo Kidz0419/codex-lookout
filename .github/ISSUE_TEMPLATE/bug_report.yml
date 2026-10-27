@@ -1,0 +1,40 @@
+name: Bug report
+description: Report a display, collection, or compatibility problem
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please use synthetic examples. Do not upload Codex databases, session JSONL, credentials, raw logs, or screenshots containing private titles and paths. For vulnerabilities, read SECURITY.md.
+  - type: input
+    id: version
+    attributes:
+      label: Lookout version and installation method
+      placeholder: 0.1.0 / release ZIP or source build
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: macOS, chip, and display setup
+      placeholder: macOS version / Apple Silicon / built-in, external, or mirrored display
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Include the Codex version and source-availability messages if relevant, with private paths removed.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Optional synthetic evidence
+      description: Include a sanitized screenshot or small synthetic example. Do not attach real session files.
