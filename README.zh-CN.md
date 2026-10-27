@@ -27,12 +27,12 @@
 
 需要 **Apple Silicon 芯片、macOS 13 或更新版本**。Intel 版尚未验证。
 
-1. 在 [Releases](https://github.com/Kidz0419/codex-lookout/releases) 有可用版本后，下载 macOS arm64 ZIP。
+1. 在 [0.1.0 公开预览版](https://github.com/Kidz0419/codex-lookout/releases/tag/v0.1.0) 下载 macOS arm64 ZIP。
 2. 解压，把 **Codex Lookout.app** 移到「应用程序」，然后打开。
 3. 在首次使用窗口确认数据目录；默认读取 `CODEX_HOME`，未设置则使用 `~/.codex`。
 4. 鼠标移到屏幕顶部查看会话；通过菜单栏图标打开设置或退出。
 
-发行包自带 Python 运行时，使用者无需安装 Python、Xcode，也无需打开终端。默认构建仅有 ad-hoc 签名，**尚无 Developer ID 签名和 Apple 公证**；下载后 macOS 可能要求你明确批准打开，也可以自行从源码构建。发布前待办与设备验收情况见 [发布清单](docs/release-checklist.md)。
+发行包自带 Python 运行时，使用者无需安装 Python、Xcode，也无需打开终端。默认构建仅有 ad-hoc 签名，**尚无 Developer ID 签名和 Apple 公证**；下载后 macOS 可能要求你明确批准打开，也可以自行从源码构建。发布验证与待验收设备情况见 [发布清单](docs/release-checklist.md)。
 
 有刘海时按系统提供的安全区域定位；没有对应几何信息时放在顶部中央。不使用摄像头，不需要摄像头或辅助功能权限。登录时启动默认关闭。
 

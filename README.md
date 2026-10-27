@@ -27,7 +27,7 @@ The app interface is currently in Simplified Chinese. English and Chinese docume
 
 Requires **Apple Silicon and macOS 13 or later**. Intel builds are not validated.
 
-1. Download the macOS arm64 ZIP from [Releases](https://github.com/Kidz0419/codex-lookout/releases) when a build is available.
+1. Download the macOS arm64 ZIP from the [0.1.0 public preview](https://github.com/Kidz0419/codex-lookout/releases/tag/v0.1.0).
 2. Extract it, move **Codex Lookout.app** to Applications, and open it.
 3. Check the data folder in the first-run window. The default is `CODEX_HOME` when set, otherwise `~/.codex`.
 4. Hover over the top-center indicator. Use the menu-bar icon to reach settings or quit.

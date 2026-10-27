@@ -1,6 +1,6 @@
 # Release checklist
 
-Target: **Codex Lookout 0.1.0**, Apple Silicon, macOS 13+. This is the initial public preview. A configured workflow or a local build alone does not mean the project has been published.
+Target: **Codex Lookout 0.1.0**, Apple Silicon, macOS 13+. This is the initial public preview. Published as [v0.1.0 public preview](https://github.com/Kidz0419/codex-lookout/releases/tag/v0.1.0) on 2026-10-28; release commit `747ed5a` passed hosted CI. Pending device checks remain below.
 
 ## Source and package
 
@@ -27,10 +27,10 @@ Target: **Codex Lookout 0.1.0**, Apple Silicon, macOS 13+. This is the initial p
 
 - [x] Choose the exact candidate and state its signing status. Default builds are **ad-hoc signed, not notarized**.
 - [ ] If using Developer ID, complete notarization, stapling, and Gatekeeper assessment for the same artifact.
-- [ ] Confirm repository visibility, default branch, license, and public issue/security routes.
-- [ ] Publish the source and tag the reviewed commit.
-- [ ] Upload the verified ZIP and its matching SHA-256 file; include requirements, installation, and known limitations.
-- [ ] Verify the public source, download, and checksum links from a fresh browser session.
-- [ ] Update candidate wording and this checklist with actual results, without turning untested items into claims.
+- [x] Confirm repository visibility, default branch, license, and public issue/security routes.
+- [x] Publish the source and tag the reviewed commit.
+- [x] Upload the verified ZIP and its matching SHA-256 file; include requirements, installation, and known limitations.
+- [x] Verify the public source page and fetch download/checksum links without authentication; both files match the reviewed local artifacts.
+- [x] Update candidate wording and this checklist with actual results, without turning untested items into claims.
 
 A public preview release can retain documented pending device checks. It should not claim notarization, support for untested architectures, precise live token speed, or confirmed hang detection.

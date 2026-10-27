@@ -15,7 +15,7 @@ These checks were performed during development on one Apple Silicon Mac. They do
 
 ## 0.1.0 preview checks
 
-The integrated candidate has passed 54 Python regressions, 18 native model checks, and 14 preferences checks locally. A self-contained package passed synthetic monitor/native/dashboard smoke checks, ZIP integrity, SHA-256 verification, and deep code-signature verification. The app is approximately 21 MB and its ZIP approximately 9.5 MB; the final archive is 9,977,812 bytes. These checks used ad-hoc signing. The GitHub workflows have been written but have not yet been verified in a hosted run.
+The released preview passed 54 Python regressions, 18 native model checks, and 14 preferences checks locally. A self-contained package passed synthetic monitor/native/dashboard smoke checks, ZIP integrity, SHA-256 verification, and deep code-signature verification. The app is approximately 21 MB and its ZIP approximately 9.5 MB; the final archive is 9,977,812 bytes. These checks used ad-hoc signing. The release commit also passed the hosted [GitHub Checks run](https://github.com/Kidz0419/codex-lookout/actions/runs/40538285064), including native tests, a self-contained build, and packaged smoke checks. The optional signing/notarization workflow remains untested.
 
 The final package passed an audit for private build paths in bundle bytes and 5,700 frozen Python code objects. Native first-run, settings/help navigation, refresh changes, empty source selection, and default-source recovery were exercised in the app. The actual helper process used the chosen 5-second interval; an empty source returned zero tasks/unavailable, and restoring the source returned a fresh real snapshot. Default settings were restored afterward.
 
@@ -40,3 +40,5 @@ codesign --verify --deep --strict 'dist/Codex Lookout.app'
 ```
 
 These commands are the intended validation sequence, not a claim that a new checkout has already passed. See [building](building.md) and the [release checklist](release-checklist.md). Public screenshots and fixtures must contain synthetic data only; local review captures are not release assets.
+
+The [public v0.1.0 release](https://github.com/Kidz0419/codex-lookout/releases/tag/v0.1.0) was verified after publication: both ZIP and checksum were fetched without authentication and matched the local artifacts byte for byte.
